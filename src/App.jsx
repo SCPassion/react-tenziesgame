@@ -5,8 +5,6 @@ import Confetti from 'react-confetti'
 export default function () {
     const [diceState, setDiceState] = React.useState(() => generateRandomNumbers())
     const ref = React.useRef(null)
-    const audio = new Audio('../public/click.wav')
-
     const isWinning = diceState.every(dice => dice.isHeld && dice.number === diceState[0].number)
 
     const diceElements = diceState.map(dice => {
@@ -28,6 +26,7 @@ export default function () {
 
 
     if (isWinning && ref.current !== null) {
+        new Audio("/winning.wav").play()
         ref.current.focus()
     }
 
@@ -42,7 +41,7 @@ export default function () {
     }
 
     function handleDiceClick(id) {
-        audio.play()
+        new Audio('/click.wav').play()
         setDiceState(prevState =>
             prevState.map(dice =>
                 dice.id === id ?
