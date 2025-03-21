@@ -4,6 +4,8 @@ import Confetti from 'react-confetti'
 
 export default function () {
     const [diceState, setDiceState] = React.useState(() => generateRandomNumbers())
+    const [rollCount, setRollCount] = React.useState(0)
+
     const ref = React.useRef(null)
     const isWinning = diceState.every(dice => dice.isHeld && dice.number === diceState[0].number)
 
@@ -54,11 +56,13 @@ export default function () {
 
     function handleRoll() {
         if (!isWinning) {
+            setRollCount(prevCount => prevCount + 1)
             setDiceState(prevState => prevState.map(dice =>
                 dice.isHeld ?
                     dice : { ...dice, number: Math.floor(Math.random() * 10 + 1) }
             ))
         } else {
+            setRollCount(0)
             setDiceState(generateRandomNumbers())
         }
     }
@@ -78,6 +82,9 @@ export default function () {
                 ref={ref}
             >{isWinning ? "New Game!" : "Roll"}
             </button>
+            <section>
+                <p>Count: <span>{rollCount}</span></p>
+            </section>
             {isWinning && <Confetti />}
         </main>
     )
