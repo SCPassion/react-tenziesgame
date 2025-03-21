@@ -89,3 +89,13 @@ button:hover {
   transform: scale(1.2);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
+
+.section-stats {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+}
+
+span {
+  font-weight: 900;
+}
