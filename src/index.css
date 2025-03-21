@@ -48,6 +48,14 @@ header>p {
   color: #4A4E74;
 }
 
+
+button {
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+}
+
 .btn-roll {
   background-color: #5035FF;
   color: #FFFFFF;
@@ -56,4 +64,15 @@ header>p {
   font-size: 16.38px;
   padding: 5.76px 30px;
   border-radius: 5px;
+}
+
+.section-dice {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 1.2em;
+}
+
+.dice {
+  width: 35.84px;
+  height: 35.84px;
 }
