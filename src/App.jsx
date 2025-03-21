@@ -1,8 +1,13 @@
-import React from 'react';
-import { nanoid } from 'nanoid';
+import React from 'react'
+import { nanoid } from 'nanoid'
+import Confetti from 'react-confetti'
 
 export default function () {
     const [diceState, setDiceState] = React.useState(() => generateRandomNumbers())
+    const ref = React.useRef(null)
+    const audio = new Audio('../public/click.wav')
+
+    const isWinning = diceState.every(dice => dice.isHeld && dice.number === diceState[0].number)
 
     const diceElements = diceState.map(dice => {
         const style = {
@@ -14,22 +19,16 @@ export default function () {
                 style={style}
                 className="dice"
                 onClick={() => handleDiceClick(dice.id)}
+                disabled={isWinning}
             >
                 {dice.number}
             </button>
         )
-    }
-    )
+    })
 
-    function handleDiceClick(id) {
-        setDiceState(prevState =>
-            prevState.map(dice =>
-                dice.id === id ?
-                    {
-                        ...dice,
-                        isHeld: !dice.isHeld
-                    } : dice
-            ))
+
+    if (isWinning && ref.current !== null) {
+        ref.current.focus()
     }
 
     function generateRandomNumbers() {
@@ -42,6 +41,29 @@ export default function () {
         ))
     }
 
+    function handleDiceClick(id) {
+        audio.play()
+        setDiceState(prevState =>
+            prevState.map(dice =>
+                dice.id === id ?
+                    {
+                        ...dice,
+                        isHeld: !dice.isHeld
+                    } : dice
+            ))
+    }
+
+    function handleRoll() {
+        if (!isWinning) {
+            setDiceState(prevState => prevState.map(dice =>
+                dice.isHeld ?
+                    dice : { ...dice, number: Math.floor(Math.random() * 10 + 1) }
+            ))
+        } else {
+            setDiceState(generateRandomNumbers())
+        }
+    }
+
     return (
         <main>
             <header>
@@ -51,7 +73,13 @@ export default function () {
             <section className="section-dice">
                 {diceElements}
             </section>
-            <button className="btn-roll">Roll</button>
+            <button
+                onClick={handleRoll}
+                className="btn-roll"
+                ref={ref}
+            >{isWinning ? "New Game!" : "Roll"}
+            </button>
+            {isWinning && <Confetti />}
         </main>
     )
 }
